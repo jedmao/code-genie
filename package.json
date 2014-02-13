@@ -1,0 +1,43 @@
+{
+  "name": "code-genie",
+  "version": "0.1.0-dev",
+  "author": "Jed Mao <jed.hunsaker+npm@gmail.com>",
+  "description": "Infers, checks and fixes (beautifies) JavaScript based on EditorConfig and/or code-genie settings.",
+  "bin": {
+    "genie": "./bin/genie.js",
+    "code-genie": "./bin/genie.js"
+  },
+  "main": "./lib/api.js",
+  "scripts": {
+    "test": "grunt test"
+  },
+  files: [
+    "LICENSE",
+    "README.md",
+    "bin",
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jedmao/code-genie.git"
+  },
+  "keywords": [
+    "ast",
+    "formatting",
+    "beautifier",
+    "pretty",
+    "editorconfig",
+    "esprima",
+    "code",
+    "genie"
+  ],
+  "preferGlobal": true,
+  "license": {
+    "type": "MIT",
+    "url": "https://github.com/jedmao/code-genie/blob/master/LICENSE"
+  },
+  "bugs": {
+    "url": "https://github.com/jedmao/code-genie/issues"
+  },
+  "homepage": "https://github.com/jedmao/code-genie"
+}
