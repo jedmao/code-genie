@@ -11,7 +11,7 @@
   "scripts": {
     "test": "grunt test"
   },
-  files: [
+  "files": [
     "LICENSE",
     "README.md",
     "bin",
