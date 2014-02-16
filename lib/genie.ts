@@ -16,13 +16,13 @@ import InferReporter = require('./InferReporter');
 class Genie extends events.EventEmitter {
 
 	private options: IOptions;
-	private emitterCount = 0;
+	private reporterCount = 0;
 
 	check(files: string[], options?: IOptions): events.EventEmitter {
-		this.emitterCount = 0;
+		this.reporterCount = 0;
 		this.options = options || {};
 		this.forEachFile(files, (contents, settings, rule) => {
-			this.emitterCount++;
+			this.reporterCount++;
 			var reporter = new Reporter();
 			rule.check(contents, settings, reporter);
 			reporter.on('end', this.onReporterEnd.bind(this));
@@ -61,16 +61,16 @@ class Genie extends events.EventEmitter {
 	}
 
 	private onReporterEnd() {
-		if (--this.emitterCount === 0) {
+		if (--this.reporterCount === 0) {
 			this.emit('end');
 		}
 	}
 
 	fix(files: string[], options?: IOptions): events.EventEmitter {
-		this.emitterCount = 0;
+		this.reporterCount = 0;
 		this.options = options || {};
 		this.forEachFile(files, (contents, settings, rule) => {
-			this.emitterCount++;
+			this.reporterCount++;
 			var reporter = new FixReporter();
 			rule.fix(contents, settings, reporter);
 			reporter.on('end', this.onReporterEnd.bind(this));
@@ -79,10 +79,10 @@ class Genie extends events.EventEmitter {
 	}
 
 	infer(files: string[], options?: IOptions): events.EventEmitter {
-		this.emitterCount = 0;
+		this.reporterCount = 0;
 		this.options = options || {};
 		this.forEachFile(files, (contents, settings, rule) => {
-			this.emitterCount++;
+			this.reporterCount++;
 			var reporter = new InferReporter();
 			rule.infer(contents, settings, reporter);
 			reporter.on('end', this.onReporterEnd.bind(this));
