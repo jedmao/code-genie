@@ -1,5 +1,5 @@
 ﻿import Reporter = require('./Reporter');
-import IHashTable = require('interfaces/IHashTable');
+import IHashTable = require('../interfaces/IHashTable');
 
 
 class InferReporter extends Reporter {

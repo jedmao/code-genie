@@ -8,9 +8,9 @@ import IOptions = require('interfaces/IOptions');
 import IRule = require('interfaces/IRule');
 import ISettings = require('interfaces/ISettings');
 import orderedRules = require('rules/orderedRules');
-import Reporter = require('./Reporter');
-import FixReporter = require('./FixReporter');
-import InferReporter = require('./InferReporter');
+import Reporter = require('reporters/Reporter');
+import FixReporter = require('reporters/FixReporter');
+import InferReporter = require('reporters/InferReporter');
 
 
 class Genie extends events.EventEmitter {

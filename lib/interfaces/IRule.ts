@@ -1,9 +1,9 @@
 ﻿/// <reference path="../../bower_components/dt-node/node.d.ts" />
 import events = require('events');
 import ISettings = require('./ISettings');
-import Reporter = require('../Reporter');
-import FixReporter = require('../FixReporter');
-import InferReporter = require('../InferReporter');
+import Reporter = require('../reporters/Reporter');
+import FixReporter = require('../reporters/FixReporter');
+import InferReporter = require('../reporters/InferReporter');
 
 
 interface IRule {

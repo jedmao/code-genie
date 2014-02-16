@@ -2,9 +2,9 @@
 import events = require('events');
 import IRule = require('../interfaces/IRule');
 import ISettings = require('../interfaces/ISettings');
-import Reporter = require('../Reporter');
-import FixReporter = require('../FixReporter');
-import InferReporter = require('../InferReporter');
+import Reporter = require('../reporters/Reporter');
+import FixReporter = require('../reporters/FixReporter');
+import InferReporter = require('../reporters/InferReporter');
 
 
 class SpacesInBracketsRule extends events.EventEmitter implements IRule {
