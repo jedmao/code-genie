@@ -33,8 +33,8 @@ class Genie extends events.EventEmitter {
 				if (err) {
 					this.emit('error', err);
 				}
-				var editorConfigSettings = ec.parse(file);
-				var settings = extend(editorConfigSettings, this.options.settings);
+				var settings = this.options.editor_config ? ec.parse(file) : {};
+				settings = extend(settings, this.options.settings);
 				// ReSharper disable once InconsistentNaming
 				this.getRulesForSettings(settings).forEach(Rule => {
 					callback(contents, settings, new Rule());
