@@ -2,22 +2,25 @@
 import events = require('events');
 import IRule = require('../interfaces/IRule');
 import ISettings = require('../interfaces/ISettings');
+import Reporter = require('../Reporter');
+import FixReporter = require('../FixReporter');
+import InferReporter = require('../InferReporter');
 
 
 class IndentSizeRule extends events.EventEmitter implements IRule {
 
 	static setting = 'indent_size';
 
-	check(contents: string, settings: ISettings) {
-		return this;
+	check(contents: string, settings: ISettings, reporter: Reporter) {
+		return;
 	}
 
-	fix(contents: string, settings: ISettings) {
-		return this;
+	fix(contents: string, settings: ISettings, reporter: FixReporter) {
+		return;
 	}
 
-	infer(contents: string, settings: ISettings) {
-		return this;
+	infer(contents: string, settings: ISettings, reporter: InferReporter) {
+		return;
 	}
 }
 

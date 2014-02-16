@@ -8,6 +8,9 @@ import IOptions = require('interfaces/IOptions');
 import IRule = require('interfaces/IRule');
 import ISettings = require('interfaces/ISettings');
 import orderedRules = require('rules/orderedRules');
+import Reporter = require('./Reporter');
+import FixReporter = require('./FixReporter');
+import InferReporter = require('./InferReporter');
 
 
 class Genie extends events.EventEmitter {
@@ -20,7 +23,9 @@ class Genie extends events.EventEmitter {
 		this.options = options || {};
 		this.forEachFile(files, (contents, settings, rule) => {
 			this.emitterCount++;
-			this.addCommonListeners(rule.check(contents, settings));
+			var reporter = new Reporter();
+			rule.check(contents, settings, reporter);
+			reporter.on('end', this.onReporterEnd.bind(this));
 		});
 		return this;
 	}
@@ -55,16 +60,10 @@ class Genie extends events.EventEmitter {
 		});
 	}
 
-	private addCommonListeners(emitter: events.EventEmitter) {
-		emitter.on('error', this.emit.bind(this, 'error'));
-		emitter.on('warn', this.emit.bind(this, 'warn'));
-		emitter.on('debug', this.emit.bind(this, 'debug'));
-		emitter.on('info', this.emit.bind(this, 'info'));
-		emitter.on('end', () => {
-			if (--this.emitterCount === 0) {
-				this.emit('end');
-			}
-		});
+	private onReporterEnd() {
+		if (--this.emitterCount === 0) {
+			this.emit('end');
+		}
 	}
 
 	fix(files: string[], options?: IOptions): events.EventEmitter {
@@ -72,9 +71,9 @@ class Genie extends events.EventEmitter {
 		this.options = options || {};
 		this.forEachFile(files, (contents, settings, rule) => {
 			this.emitterCount++;
-			var emitter = rule.fix(contents, settings);
-			emitter.on('fix', this.emit.bind(this, 'fix'));
-			this.addCommonListeners(emitter);
+			var reporter = new FixReporter();
+			rule.fix(contents, settings, reporter);
+			reporter.on('end', this.onReporterEnd.bind(this));
 		});
 		return this;
 	}
@@ -84,9 +83,9 @@ class Genie extends events.EventEmitter {
 		this.options = options || {};
 		this.forEachFile(files, (contents, settings, rule) => {
 			this.emitterCount++;
-			var emitter = rule.infer(contents, settings);
-			emitter.on('infer', this.emit.bind(this, 'infer'));
-			this.addCommonListeners(emitter);
+			var reporter = new InferReporter();
+			rule.infer(contents, settings, reporter);
+			reporter.on('end', this.onReporterEnd.bind(this));
 		});
 		return this;
 	}
