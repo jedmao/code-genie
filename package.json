@@ -39,5 +39,21 @@
   "bugs": {
     "url": "https://github.com/jedmao/code-genie/issues"
   },
-  "homepage": "https://github.com/jedmao/code-genie"
+  "homepage": "https://github.com/jedmao/code-genie",
+  "dependencies": {
+    "editorconfig": "~0.11.4",
+    "node.extend": "~1.0.9",
+    "typescript-require": "~0.2.6"
+  },
+  "devDependencies": {
+    "chai": "~1.9.0",
+    "grunt": "~0.4.2",
+    "grunt-contrib-clean": "~0.5.0",
+    "grunt-contrib-watch": "~0.5.3",
+    "grunt-mocha-test": "~0.9.0",
+    "grunt-tslint": "~0.4.0",
+    "grunt-typescript-compile": "~0.1.1",
+    "sinon": "~1.8.2",
+    "sinon-chai": "~2.5.0"
+  }
 }

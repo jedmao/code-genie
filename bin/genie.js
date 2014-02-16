@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
-var cli = require("../lib/cli");
+require('typescript-require');
+var cli = require('../lib/cli.ts');
 var exitCode = cli.execute(process.argv);
 process.exit(exitCode);

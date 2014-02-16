@@ -1,0 +1,6 @@
+**/.*
+bower.json
+tslint.json
+
+artwork/
+test/

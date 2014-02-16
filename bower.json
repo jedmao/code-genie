@@ -1,0 +1,33 @@
+{
+  "name": "code-genie",
+  "version": "0.1.0",
+  "homepage": "https://github.com/jedmao/code-genie",
+  "authors": [
+    "Jed Hunsaker <jed.hunsaker+npm@gmail.com>"
+  ],
+  "description": "Infers, checks and fixes (beautifies) JavaScript based on EditorConfig and/or code-genie settings.",
+  "main": "./lib/api.js",
+  "keywords": [
+    "ast",
+    "formatting",
+    "beautifier",
+    "pretty",
+    "editorconfig",
+    "esprima",
+    "code",
+    "genie"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test"
+  ],
+  "devDependencies": {
+    "dt-mocha": "~1.9.0",
+    "dt-node": "*",
+    "dt-sinon": "~1.5.0",
+    "dt-sinon-chai": "~2.4.0"
+  }
+}
