@@ -33,27 +33,28 @@ class Genie extends events.EventEmitter {
 	}
 
 	private registerRules() {
+		require('typescript-require');
 		var registry = new RuleRegistry();
 		registry.add('indent_style',
-			require('rules/IndentStyleRule'));
+			require('rules/IndentStyleRule.ts'));
 		registry.add('indent_size',
-			require('rules/IndentSizeRule'));
+			require('rules/IndentSizeRule.ts'));
 		registry.add('insert_final_newline',
-			require('rules/InsertFinalNewlineRule'));
+			require('rules/InsertFinalNewlineRule.ts'));
 		registry.add('quote_type',
-			require('rules/QuoteTypeRule'));
+			require('rules/QuoteTypeRule.ts'));
 		registry.add('space_after_anonymous_functions',
-			require('rules/SpaceAfterAnonymousFunctionsRule'));
+			require('rules/SpaceAfterAnonymousFunctionsRule.ts'));
 		registry.add('space_after_control_statements',
-			require('rules/SpaceAfterControlStatementsRule'));
+			require('rules/SpaceAfterControlStatementsRule.ts'));
 		registry.add('space_around_operators',
-			require('rules/SpacesAroundOperatorsRule'));
+			require('rules/SpacesAroundOperatorsRule.ts'));
 		registry.add('trim_trailing_whitespace',
-			require('rules/TrimTrailingWhitespaceRule'));
+			require('rules/TrimTrailingWhitespaceRule.ts'));
 		registry.add('spaces_in_brackets',
-			require('rules/SpacesInBracketsRule'));
+			require('rules/SpacesInBracketsRule.ts'));
 		registry.add('end_of_line',
-			require('rules/EndOfLineRule'));
+			require('rules/EndOfLineRule.ts'));
 		return registry;
 	}
 
