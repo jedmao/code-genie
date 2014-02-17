@@ -1,8 +1,8 @@
-﻿/// <reference path="../../bower_components/dt-node/node.d.ts" />
+﻿/// <reference path="../bower_components/dt-node/node.d.ts" />
 import events = require('events');
 
 
-class Reporter extends events.EventEmitter {
+class Logger extends events.EventEmitter {
 
 	info(message: string) {
 		this.emit('info', message);
@@ -20,10 +20,6 @@ class Reporter extends events.EventEmitter {
 		this.emit('error', err);
 	}
 
-	end() {
-		this.emit('end');
-	}
-
 }
 
-export = Reporter;
+export = Logger;

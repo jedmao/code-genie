@@ -7,27 +7,54 @@ var extend = require('node.extend');
 import IOptions = require('interfaces/IOptions');
 import IRule = require('interfaces/IRule');
 import ISettings = require('interfaces/ISettings');
-import orderedRules = require('rules/orderedRules');
-import Reporter = require('reporters/Reporter');
-import FixReporter = require('reporters/FixReporter');
-import InferReporter = require('reporters/InferReporter');
+import Logger = require('./Logger');
+import RuleRegistry = require('./RuleRegistry');
 
 
 class Genie extends events.EventEmitter {
 
 	private options: IOptions;
-	private reporterCount = 0;
+	private fileCount: number;
+	public ruleRegistry: RuleRegistry;
 
-	check(files: string[], options?: IOptions): events.EventEmitter {
-		this.reporterCount = 0;
+	fix(files: string[], options?: IOptions): Genie {
 		this.options = options || {};
+		this.ruleRegistry = this.ruleRegistry || this.registerRules();
+		this.fileCount = files.length;
 		this.forEachFile(files, (contents, settings, rule) => {
-			this.reporterCount++;
-			var reporter = new Reporter();
-			rule.check(contents, settings, reporter);
-			reporter.on('end', this.onReporterEnd.bind(this));
+			var logger = new Logger();
+			logger.emit = this.emit.bind(this);
+			rule.fix(contents, settings, logger);
+			if (--this.fileCount === 0) {
+				this.emit('end');
+			}
 		});
 		return this;
+	}
+
+	private registerRules() {
+		var registry = new RuleRegistry();
+		registry.add('indent_style',
+			require('rules/IndentStyleRule'));
+		registry.add('indent_size',
+			require('rules/IndentSizeRule'));
+		registry.add('insert_final_newline',
+			require('rules/InsertFinalNewlineRule'));
+		registry.add('quote_type',
+			require('rules/QuoteTypeRule'));
+		registry.add('space_after_anonymous_functions',
+			require('rules/SpaceAfterAnonymousFunctionsRule'));
+		registry.add('space_after_control_statements',
+			require('rules/SpaceAfterControlStatementsRule'));
+		registry.add('space_around_operators',
+			require('rules/SpacesAroundOperatorsRule'));
+		registry.add('trim_trailing_whitespace',
+			require('rules/TrimTrailingWhitespaceRule'));
+		registry.add('spaces_in_brackets',
+			require('rules/SpacesInBracketsRule'));
+		registry.add('end_of_line',
+			require('rules/EndOfLineRule'));
+		return registry;
 	}
 
 	private forEachFile(files: string[],
@@ -55,45 +82,13 @@ class Genie extends events.EventEmitter {
 		if (!filteredSettings.length) {
 			return [];
 		}
-		return orderedRules.filter((rule: IHaveSetting) => {
+		return this.ruleRegistry.rules.filter(rule => {
 			return filteredSettings.indexOf(rule.setting) !== 0;
+		}).map(rule => {
+			return <typeof IRule>rule.type;
 		});
 	}
 
-	private onReporterEnd() {
-		if (--this.reporterCount === 0) {
-			this.emit('end');
-		}
-	}
-
-	fix(files: string[], options?: IOptions): events.EventEmitter {
-		this.reporterCount = 0;
-		this.options = options || {};
-		this.forEachFile(files, (contents, settings, rule) => {
-			this.reporterCount++;
-			var reporter = new FixReporter();
-			rule.fix(contents, settings, reporter);
-			reporter.on('end', this.onReporterEnd.bind(this));
-		});
-		return this;
-	}
-
-	infer(files: string[], options?: IOptions): events.EventEmitter {
-		this.reporterCount = 0;
-		this.options = options || {};
-		this.forEachFile(files, (contents, settings, rule) => {
-			this.reporterCount++;
-			var reporter = new InferReporter();
-			rule.infer(contents, settings, reporter);
-			reporter.on('end', this.onReporterEnd.bind(this));
-		});
-		return this;
-	}
-
-}
-
-interface IHaveSetting {
-	setting: string;
 }
 
 export = Genie;
