@@ -1,4 +1,4 @@
-﻿import IRule = require('interfaces/IRule');
+﻿import Rule = require('./Rule');
 import RuleDescriptor = require('./RuleDescriptor');
 
 
@@ -9,7 +9,7 @@ class RuleRegistry {
 		return this._rules;
 	}
 
-	add(setting: string, type: IRule) {
+	add(setting: string, type: typeof Rule) {
 		if (this.settingExists(setting)) {
 			throw new Error('Setting "' + setting + '" already exists');
 		}

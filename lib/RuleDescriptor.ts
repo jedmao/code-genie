@@ -1,8 +1,8 @@
-﻿import IRule = require('./interfaces/IRule');
+﻿import Rule = require('./Rule');
 
 
 class RuleDescriptor {
-	constructor(public setting: string, public type: typeof IRule) {
+	constructor(public setting: string, public type: typeof Rule) {
 		return;
 	}
 }

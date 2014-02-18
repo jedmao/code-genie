@@ -5,26 +5,57 @@ var ec = require('editorconfig');
 var extend = require('node.extend');
 
 import IOptions = require('interfaces/IOptions');
-import IRule = require('interfaces/IRule');
 import ISettings = require('interfaces/ISettings');
+import Rule = require('./Rule');
 import Logger = require('./Logger');
-import RuleRegistry = require('./RuleRegistry');
+import RuleFactory = require('./RuleFactory');
+import Token = require('./Token');
 
 
 class Genie extends events.EventEmitter {
 
 	private options: IOptions;
 	private fileCount: number;
-	public ruleRegistry: RuleRegistry;
+	public ruleFactory = new RuleFactory();
+
+	constructor(private logger?: Logger) {
+		super();
+		if (!logger) {
+			this.logger = logger;
+		}
+		this.registerRules();
+	}
+
+	private registerRules() {
+		require('typescript-require');
+		var reg = this.ruleFactory.register;
+		reg('indent_style',
+			require('rules/IndentStyleRule.ts'));
+		reg('indent_size',
+			require('rules/IndentSizeRule.ts'));
+		reg('insert_final_newline',
+			require('rules/InsertFinalNewlineRule.ts'));
+		reg('quote_type',
+			require('rules/QuoteTypeRule.ts'));
+		reg('space_after_anonymous_functions',
+			require('rules/SpaceAfterAnonymousFunctionsRule.ts'));
+		reg('space_after_control_statements',
+			require('rules/SpaceAfterControlStatementsRule.ts'));
+		reg('space_around_operators',
+			require('rules/SpacesAroundOperatorsRule.ts'));
+		reg('trim_trailing_whitespace',
+			require('rules/TrimTrailingWhitespaceRule.ts'));
+		reg('spaces_in_brackets',
+			require('rules/SpacesInBracketsRule.ts'));
+		reg('end_of_line',
+			require('rules/EndOfLineRule.ts'));
+	}
 
 	fix(files: string[], options?: IOptions): Genie {
 		this.options = options || {};
-		this.ruleRegistry = this.ruleRegistry || this.registerRules();
 		this.fileCount = files.length;
-		this.forEachFile(files, (contents, settings, rule) => {
-			var logger = new Logger();
-			logger.emit = this.emit.bind(this);
-			rule.fix(contents, settings, logger);
+		this.forEachFile(files, (contents, rule) => {
+			rule.fix(Token.parse(contents));
 			if (--this.fileCount === 0) {
 				this.emit('end');
 			}
@@ -32,34 +63,8 @@ class Genie extends events.EventEmitter {
 		return this;
 	}
 
-	private registerRules() {
-		require('typescript-require');
-		var registry = new RuleRegistry();
-		registry.add('indent_style',
-			require('rules/IndentStyleRule.ts'));
-		registry.add('indent_size',
-			require('rules/IndentSizeRule.ts'));
-		registry.add('insert_final_newline',
-			require('rules/InsertFinalNewlineRule.ts'));
-		registry.add('quote_type',
-			require('rules/QuoteTypeRule.ts'));
-		registry.add('space_after_anonymous_functions',
-			require('rules/SpaceAfterAnonymousFunctionsRule.ts'));
-		registry.add('space_after_control_statements',
-			require('rules/SpaceAfterControlStatementsRule.ts'));
-		registry.add('space_around_operators',
-			require('rules/SpacesAroundOperatorsRule.ts'));
-		registry.add('trim_trailing_whitespace',
-			require('rules/TrimTrailingWhitespaceRule.ts'));
-		registry.add('spaces_in_brackets',
-			require('rules/SpacesInBracketsRule.ts'));
-		registry.add('end_of_line',
-			require('rules/EndOfLineRule.ts'));
-		return registry;
-	}
-
 	private forEachFile(files: string[],
-		callback: (contents: string, settings: ISettings, rule: IRule) => void) {
+		callback: (contents: string, rule: Rule) => void) {
 
 		files.forEach(file => {
 			fs.readFile(file, { encoding: this.options.encoding }, (err, contents) => {
@@ -69,24 +74,10 @@ class Genie extends events.EventEmitter {
 				var settings = this.options.editor_config ? ec.parse(file) : {};
 				settings = extend(settings, this.options.settings);
 				// ReSharper disable once InconsistentNaming
-				this.getRulesForSettings(settings).forEach(Rule => {
-					callback(contents, settings, new Rule());
+				this.ruleFactory.create(settings, this.logger).forEach(rule => {
+					callback(contents, rule);
 				});
 			});
-		});
-	}
-
-	private getRulesForSettings(settings: ISettings): any[] {
-		var filteredSettings = Object.keys(settings).filter(key => {
-			return settings[key] === true;
-		});
-		if (!filteredSettings.length) {
-			return [];
-		}
-		return this.ruleRegistry.rules.filter(rule => {
-			return filteredSettings.indexOf(rule.setting) !== 0;
-		}).map(rule => {
-			return <typeof IRule>rule.type;
 		});
 	}
 

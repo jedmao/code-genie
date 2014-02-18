@@ -1,12 +1,17 @@
-﻿import IRule = require('../interfaces/IRule');
-import ISettings = require('../interfaces/ISettings');
-import Logger = require('../Logger');
+﻿import Rule = require('../Rule');
+import Token = require('../Token');
 
 
-class SpaceAfterAnonymousFunctionsRule implements IRule {
-	fix(contents: string, settings: ISettings, logger: Logger) {
+class SpaceAfterAnonymousFunctionsRule extends Rule {
+
+	get needs() {
+		return ['space_after_anonymous_functions'];
+	}
+
+	fix(contents: Token) {
 		return contents;
 	}
+
 }
 
 export = SpaceAfterAnonymousFunctionsRule;

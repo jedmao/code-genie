@@ -1,12 +1,17 @@
-﻿import IRule = require('../interfaces/IRule');
-import ISettings = require('../interfaces/ISettings');
-import Logger = require('../Logger');
+﻿import Rule = require('../Rule');
+import Token = require('../Token');
 
 
-class EndOfLineRule implements IRule {
-	fix(contents: string, settings: ISettings, logger: Logger) {
+class EndOfLineRule extends Rule {
+
+	get needs() {
+		return ['end_of_line'];
+	}
+
+	fix(contents: Token) {
 		return contents;
 	}
+
 }
 
 export = EndOfLineRule;

@@ -1,12 +1,20 @@
-﻿import IRule = require('../interfaces/IRule');
-import ISettings = require('../interfaces/ISettings');
-import Logger = require('../Logger');
+﻿import Rule = require('../Rule');
+import Token = require('../Token');
 
 
-class IndentSizeRule implements IRule {
-	fix(contents: string, settings: ISettings, logger: Logger) {
+class IndentSizeRule extends Rule {
+
+	get needs() {
+		return [
+			'indent_size',
+			'tab_width'
+		];
+	}
+
+	fix(contents: Token) {
 		return contents;
 	}
+
 }
 
 export = IndentSizeRule;

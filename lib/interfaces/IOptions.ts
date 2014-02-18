@@ -1,10 +1,7 @@
-﻿import ISettings = require('./ISettings');
-
-
-interface IOptions {
+﻿interface IOptions {
 	encoding?: string;
 	editor_config?: boolean;
-	settings?: ISettings;
+	settings?: any;
 }
 
 export = IOptions;

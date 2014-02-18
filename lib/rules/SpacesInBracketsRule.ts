@@ -1,12 +1,17 @@
-﻿import IRule = require('../interfaces/IRule');
-import ISettings = require('../interfaces/ISettings');
-import Logger = require('../Logger');
+﻿import Rule = require('../Rule');
+import Token = require('../Token');
 
 
-class SpacesInBracketsRule implements IRule {
-	fix(contents: string, settings: ISettings, logger: Logger) {
+class SpacesInBracketsRule extends Rule {
+
+	get needs() {
+		return ['spaces_in_brackets'];
+	}
+
+	fix(contents: Token) {
 		return contents;
 	}
+
 }
 
 export = SpacesInBracketsRule;

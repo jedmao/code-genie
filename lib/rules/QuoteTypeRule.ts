@@ -1,12 +1,17 @@
-﻿import IRule = require('../interfaces/IRule');
-import ISettings = require('../interfaces/ISettings');
-import Logger = require('../Logger');
+﻿import Rule = require('../Rule');
+import Token = require('../Token');
 
 
-class QuoteTypeRule implements IRule {
-	fix(contents: string, settings: ISettings, logger: Logger) {
+class QuoteTypeRule extends Rule {
+
+	get needs() {
+		return ['quote_type'];
+	}
+
+	fix(contents: Token) {
 		return contents;
 	}
+
 }
 
 export = QuoteTypeRule;
