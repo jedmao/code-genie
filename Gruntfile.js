@@ -4,21 +4,17 @@
 	grunt.initConfig({
 		pkg: grunt.file.readJSON('package.json'),
 		clean: {
-			files: [
-				'lib/**/*.js',
-				'!lib/api.js',
-				'test/**/*.js'
-			]
+			files: ['<%= mochaTest.test.src %>']
 		},
 		tslint: {
 			options: {
 				configuration: grunt.file.readJSON('tslint.json')
 			},
-			tscompile: {
-				src: '<%= typescript.files %>'
+			lib: {
+				src: '<%= watch.libTs.files %>'
 			},
-			tsrequire: {
-				src: ['lib/**/*.ts', '!<%= typescript.files %>']
+			test: {
+				src: '<%= watch.testTs.files %>'
 			}
 		},
 		typescript: {
@@ -26,8 +22,8 @@
 				module: 'commonjs',
 				target: 'es5'
 			},
-			files: {
-				src: ['lib/rules/*.ts', 'test/**/*.ts'],
+			test: {
+				src: '<%= watch.testTs.files %>',
 				dest: ''
 			}
 		},
@@ -41,16 +37,16 @@
 			}
 		},
 		watch: {
-			tscompile: {
-				files: '<%= tslint.tscompile %>',
-				tasks: ['tslint:tscompile', 'typescript']
+			libTs: {
+				files: ['lib/**/*.ts'],
+				tasks: ['tslint:lib', 'mochaTest']
 			},
-			tsrequire: {
-				files: '<%= tslint.tsrequire %>',
-				tasks: ['tslint:tsrequire']
+			testTs: {
+				files: ['test/**/*.ts'],
+				tasks: ['tslint:test', 'typescript']
 			},
 			js: {
-				files: ['lib/rules/*.js', 'test/**/*.js'],
+				files: ['lib/api.js', 'test/**/*.js'],
 				tasks: ['mochaTest']
 			}
 		}

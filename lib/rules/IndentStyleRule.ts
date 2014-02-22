@@ -1,5 +1,5 @@
-﻿import Rule = require('../Rule');
-import Token = require('../Token');
+﻿import Rule = require('./Rule');
+import Token = require('../tokens/Token');
 
 
 class IndentStyleRule extends Rule {
@@ -8,8 +8,12 @@ class IndentStyleRule extends Rule {
 		return ['indent_style'];
 	}
 
-	fix(contents: Token) {
-		return contents;
+	fix(token: Token) {
+		var indentStyle = this.settings['indent_style'];
+		if (typeof indentStyle === 'undefined') {
+			return;
+		}
+		// TODO: fix indent style
 	}
 
 }

@@ -1,5 +1,5 @@
-﻿import Rule = require('../Rule');
-import Token = require('../Token');
+﻿import Rule = require('./Rule');
+import Token = require('../tokens/Token');
 
 
 class IndentSizeRule extends Rule {
@@ -11,8 +11,24 @@ class IndentSizeRule extends Rule {
 		];
 	}
 
-	fix(contents: Token) {
-		return contents;
+	private indentSize: number;
+	private tryParseIndentSize() {
+		var indentSize = this.settings['indent_size'];
+		if (indentSize === 'tab') {
+			indentSize = this.settings['tab_width'];
+		}
+		if (isNaN(indentSize)) {
+			return false;
+		}
+		this.indentSize = indentSize;
+		return true;
+	}
+
+	fix(token: Token) {
+		if (!this.tryParseIndentSize()) {
+			return;
+		}
+		// TODO: Fix indent size
 	}
 
 }

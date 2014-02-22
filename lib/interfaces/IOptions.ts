@@ -1,7 +1,10 @@
-﻿interface IOptions {
+﻿import IHashTable = require('./IHashTable');
+
+
+interface IOptions {
 	encoding?: string;
 	editor_config?: boolean;
-	settings?: any;
+	settings?: IHashTable<any>;
 }
 
 export = IOptions;

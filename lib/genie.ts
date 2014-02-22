@@ -1,54 +1,36 @@
 ﻿/// <reference path="../bower_components/dt-node/node.d.ts" />
-import fs = require('fs');
-import events = require('events');
 var ec = require('editorconfig');
+import events = require('events');
 var extend = require('node.extend');
+import fs = require('fs');
 
+import IHashTable = require('interfaces/IHashTable');
 import IOptions = require('interfaces/IOptions');
-import ISettings = require('interfaces/ISettings');
-import Rule = require('./Rule');
 import Logger = require('./Logger');
-import RuleFactory = require('./RuleFactory');
-import Token = require('./Token');
+import Rule = require('rules/Rule');
+import Setting = require('settings/Setting');
+import settings = require('settings/settings');
+import SettingFactory = require('settings/SettingFactory');
+import SettingProvider = require('settings/SettingProvider');
+import Token = require('tokens/Token');
 
 
 class Genie extends events.EventEmitter {
 
 	private options: IOptions;
 	private fileCount: number;
-	public ruleFactory = new RuleFactory();
+	private settingFactory: SettingFactory;
 
 	constructor(private logger?: Logger) {
 		super();
 		if (!logger) {
 			this.logger = logger;
 		}
-		this.registerRules();
+		this.settingFactory = new SettingFactory(logger);
 	}
 
-	private registerRules() {
-		require('typescript-require');
-		var reg = this.ruleFactory.register;
-		reg('indent_style',
-			require('rules/IndentStyleRule.ts'));
-		reg('indent_size',
-			require('rules/IndentSizeRule.ts'));
-		reg('insert_final_newline',
-			require('rules/InsertFinalNewlineRule.ts'));
-		reg('quote_type',
-			require('rules/QuoteTypeRule.ts'));
-		reg('space_after_anonymous_functions',
-			require('rules/SpaceAfterAnonymousFunctionsRule.ts'));
-		reg('space_after_control_statements',
-			require('rules/SpaceAfterControlStatementsRule.ts'));
-		reg('space_around_operators',
-			require('rules/SpacesAroundOperatorsRule.ts'));
-		reg('trim_trailing_whitespace',
-			require('rules/TrimTrailingWhitespaceRule.ts'));
-		reg('spaces_in_brackets',
-			require('rules/SpacesInBracketsRule.ts'));
-		reg('end_of_line',
-			require('rules/EndOfLineRule.ts'));
+	registerSetting(setting: typeof Setting) {
+		this.settingFactory.register(setting);
 	}
 
 	fix(files: string[], options?: IOptions): Genie {
@@ -71,13 +53,23 @@ class Genie extends events.EventEmitter {
 				if (err) {
 					this.emit('error', err);
 				}
-				var settings = this.options.editor_config ? ec.parse(file) : {};
-				settings = extend(settings, this.options.settings);
-				// ReSharper disable once InconsistentNaming
-				this.ruleFactory.create(settings, this.logger).forEach(rule => {
+				var rawSettings = this.options.editor_config ? ec.parse(file) : {};
+				rawSettings = extend(rawSettings, this.options.settings);
+
+				var settings = this.settingFactory.createSettings(rawSettings);
+				var settingProvider = new SettingProvider(rawSettings, settings);
+				this.createRules(settingProvider, settings).forEach(rule => {
 					callback(contents, rule);
 				});
 			});
+		});
+	}
+
+	private createRules(settingProvider: SettingProvider, settings: IHashTable<Setting>): Rule[] {
+		return Object.keys(settings).map(key => {
+			var setting = settings[key];
+			// ReSharper disable once InconsistentNaming
+			return new setting.ruleClass(settingProvider, this.logger);
 		});
 	}
 
