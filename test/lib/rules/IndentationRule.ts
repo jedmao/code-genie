@@ -72,6 +72,15 @@ describe('Indentation Rule', () => {
 			// TODO: rule.fix(...)
 		});
 
+		describe('indent_size=tab', () => {
+
+			it.skip('enforces 1-space indentation when tab_width=1', () => {
+				var rule = createRule(undefined, 'tab', 1);
+				// TODO: rule.fix(...)
+			});
+
+		});
+
 	});
 
 	function createRule(indentStyle: string, indentSize?: any, tabWidth?: number): IndentationRule {
