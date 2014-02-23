@@ -56,4 +56,8 @@
 	grunt.registerTask('test', ['build', 'mochaTest', 'clean']);
 	grunt.registerTask('build', ['clean', 'tslint', 'typescript']);
 
+	// For the fastest possible workflow, enable compile-on-save
+	// in your text editor and run `grunt cos`.
+	grunt.registerTask('cos', ['build', 'mochaTest', 'watch:js']);
+
 };
