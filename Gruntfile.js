@@ -1,20 +1,22 @@
 ﻿module.exports = function(grunt) {
 
+	require('time-grunt')(grunt);
+
 	// Project configuration.
 	grunt.initConfig({
 		pkg: grunt.file.readJSON('package.json'),
 		clean: {
-			files: ['<%= mochaTest.test.src %>']
+			files: [
+				'<%= watch.js.files %>',
+				'!lib/api.js'
+			]
 		},
 		tslint: {
 			options: {
 				configuration: grunt.file.readJSON('tslint.json')
 			},
-			lib: {
-				src: '<%= watch.libTs.files %>'
-			},
-			test: {
-				src: '<%= watch.testTs.files %>'
+			files: {
+				src: '<%= watch.ts.files %>'
 			}
 		},
 		typescript: {
@@ -23,7 +25,7 @@
 				target: 'es5'
 			},
 			test: {
-				src: '<%= watch.testTs.files %>',
+				src: '<%= watch.ts.files %>',
 				dest: ''
 			}
 		},
@@ -37,29 +39,19 @@
 			}
 		},
 		watch: {
-			libTs: {
-				files: ['lib/**/*.ts'],
-				tasks: ['tslint:lib', 'mochaTest']
-			},
-			testTs: {
-				files: ['test/**/*.ts'],
-				tasks: ['tslint:test', 'typescript']
+			ts: {
+				files: ['lib/**/*.ts', 'test/**/*.ts'],
+				tasks: ['newer:tslint', 'typescript']
 			},
 			js: {
-				files: ['lib/api.js', 'test/**/*.js'],
+				files: ['lib/**/*.js', 'test/**/*.js'],
 				tasks: ['mochaTest']
 			}
 		}
 	});
 
-	// Load the plugin that provides the "uglify" task.
-	grunt.loadNpmTasks('grunt-contrib-clean');
-	grunt.loadNpmTasks('grunt-contrib-watch');
-	grunt.loadNpmTasks('grunt-mocha-test');
-	grunt.loadNpmTasks('grunt-tslint');
-	grunt.loadNpmTasks('grunt-typescript-compile');
+	require('load-grunt-tasks')(grunt);
 
-	// Default task(s).
 	grunt.registerTask('default', ['test']);
 	grunt.registerTask('test', ['build', 'mochaTest', 'clean']);
 	grunt.registerTask('build', ['clean', 'tslint', 'typescript']);
