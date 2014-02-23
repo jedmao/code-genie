@@ -1,5 +1,5 @@
 ﻿import Setting = require('./Setting');
-import IndentSizeRule = require('../rules/IndentSizeRule');
+import IndentationRule = require('../rules/IndentationRule');
 
 
 class IndentSizeSetting extends Setting {
@@ -9,7 +9,7 @@ class IndentSizeSetting extends Setting {
 	}
 
 	get rule() {
-		return IndentSizeRule;
+		return IndentationRule;
 	}
 
 	parse(indentSize: any): any {

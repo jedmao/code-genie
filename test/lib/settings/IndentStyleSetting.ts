@@ -23,13 +23,13 @@ describe('IndentStyle Setting', () => {
 		onWarn.reset();
 	});
 
-	it('supports and parses tab setting', () => {
-		expect(setting.parse('tab')).to.eq('\t');
+	it('supports tab setting', () => {
+		expect(setting.parse('tab')).to.eq('tab');
 		expect(onWarn).to.not.have.been.called;
 	});
 
-	it('supports and parses space setting', () => {
-		expect(setting.parse('space')).to.eq(' ');
+	it('supports space setting', () => {
+		expect(setting.parse('space')).to.eq('space');
 		expect(onWarn).to.not.have.been.called;
 	});
 

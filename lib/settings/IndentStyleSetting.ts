@@ -1,5 +1,5 @@
 ﻿import Setting = require('./Setting');
-import IndentStyleRule = require('../rules/IndentStyleRule');
+import IndentationRule = require('../rules/IndentationRule');
 
 
 class IndentStyleSetting extends Setting {
@@ -9,15 +9,14 @@ class IndentStyleSetting extends Setting {
 	}
 
 	get rule() {
-		return IndentStyleRule;
+		return IndentationRule;
 	}
 
 	parse(indentStyle: any): string {
 		switch (indentStyle) {
 			case 'tab':
-				return '\t';
 			case 'space':
-				return ' ';
+				return indentStyle;
 			default:
 				this.warn('Unsupported indent_style: ' + indentStyle);
 		}
