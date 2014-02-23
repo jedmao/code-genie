@@ -16,8 +16,9 @@ class EndOfLineSetting extends Setting {
 	parse(EOL: any): string {
 		switch (EOL) {
 			case 'lf':
+				return '\n';
 			case 'crlf':
-				return EOL;
+				return '\r\n';
 			default:
 				this.warn('Unsupported end_of_line: ' + EOL);
 		}
