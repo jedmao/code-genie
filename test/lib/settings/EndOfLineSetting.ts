@@ -10,7 +10,7 @@ describe('EndOfLine Setting', () => {
 
 	var setting: EndOfLineSetting;
 	var logger: Logger;
-	var onWarn: SinonSpyStatic;
+	var onWarn: SinonSpy;
 
 	before(() => {
 		onWarn = sinon.spy();
@@ -20,7 +20,7 @@ describe('EndOfLine Setting', () => {
 	});
 
 	afterEach(() => {
-		(<any>onWarn).reset();
+		onWarn.reset();
 	});
 
 	it('supports and parses lf setting', () => {

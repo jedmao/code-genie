@@ -1,14 +1,14 @@
 ﻿import sinonChai = require('../../sinon-chai');
 var expect = sinonChai.expect;
 import sinon = require('sinon');
-import IndentSizeSetting = require('../../../lib/settings/IndentSizeSetting');
+import IndentStyleSetting = require('../../../lib/settings/IndentStyleSetting');
 import Logger = require('../../../lib/Logger');
 
 
 // ReSharper disable WrongExpressionStatement
-describe('IndentSize Setting', () => {
+describe('IndentStyle Setting', () => {
 
-	var setting: IndentSizeSetting;
+	var setting: IndentStyleSetting;
 	var logger: Logger;
 	var onWarn: SinonSpy;
 
@@ -16,15 +16,20 @@ describe('IndentSize Setting', () => {
 		onWarn = sinon.spy();
 		logger = new Logger();
 		logger.on('warn', onWarn);
-		setting = new IndentSizeSetting(logger);
+		setting = new IndentStyleSetting(logger);
 	});
 
 	afterEach(() => {
 		onWarn.reset();
 	});
 
-	it('supports tab setting', () => {
-		expect(setting.parse('tab')).to.eq('tab');
+	it('supports and parses tab setting', () => {
+		expect(setting.parse('tab')).to.eq('\t');
+		expect(onWarn).to.not.have.been.called;
+	});
+
+	it('supports and parses space setting', () => {
+		expect(setting.parse('space')).to.eq(' ');
 		expect(onWarn).to.not.have.been.called;
 	});
 

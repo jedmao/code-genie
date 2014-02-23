@@ -15,8 +15,9 @@ class IndentStyleSetting extends Setting {
 	parse(indentStyle: any): string {
 		switch (indentStyle) {
 			case 'tab':
+				return '\t';
 			case 'space':
-				return indentStyle;
+				return ' ';
 			default:
 				this.warn('Unsupported indent_style: ' + indentStyle);
 		}
