@@ -1,14 +1,14 @@
 ﻿import sinonChai = require('../../sinon-chai');
 var expect = sinonChai.expect;
 import sinon = require('sinon');
-import EndOfLineSetting = require('../../../lib/settings/EndOfLineSetting');
+import IndentSizeSetting = require('../../../lib/settings/IndentSizeSetting');
 import Logger = require('../../../lib/Logger');
 
 
 // ReSharper disable WrongExpressionStatement
-describe('EndOfLine Setting', () => {
+describe('IndentSize Setting', () => {
 
-	var setting: EndOfLineSetting;
+	var setting: IndentSizeSetting;
 	var logger: Logger;
 	var onWarn: SinonSpyStatic;
 
@@ -16,20 +16,15 @@ describe('EndOfLine Setting', () => {
 		onWarn = sinon.spy();
 		logger = new Logger();
 		logger.on('warn', onWarn);
-		setting = new EndOfLineSetting(logger);
+		setting = new IndentSizeSetting(logger);
 	});
 
 	afterEach(() => {
 		(<any>onWarn).reset();
 	});
 
-	it('supports and parses lf setting', () => {
-		expect(setting.parse('lf')).to.eq('\n');
-		expect(onWarn).to.not.have.been.called;
-	});
-
-	it('supports and parses crlf setting', () => {
-		expect(setting.parse('crlf')).to.eq('\r\n');
+	it('supports tab setting', () => {
+		expect(setting.parse('tab')).to.eq('tab');
 		expect(onWarn).to.not.have.been.called;
 	});
 
