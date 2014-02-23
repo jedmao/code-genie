@@ -58,19 +58,26 @@ class Genie extends events.EventEmitter {
 
 				var settings = this.settingFactory.createSettings(rawSettings);
 				var settingProvider = new SettingProvider(rawSettings, settings);
-				this.createRules(settingProvider, settings).forEach(rule => {
+				this.createUniqueRules(settingProvider, settings).forEach(rule => {
 					callback(contents, rule);
 				});
 			});
 		});
 	}
 
-	private createRules(settingProvider: SettingProvider, settings: IHashTable<Setting>): Rule[] {
-		return Object.keys(settings).map(key => {
+	private createUniqueRules(settingProvider: SettingProvider, settings: IHashTable<Setting>): Rule[] {
+		var alreadyRegistered: any = {};
+		var rules = [];
+		Object.keys(settings).forEach(key => {
 			var setting = settings[key];
-			// ReSharper disable once InconsistentNaming
-			return new setting.ruleClass(settingProvider, this.logger);
+			var ruleClass = setting.ruleClass;
+			if (typeof alreadyRegistered[ruleClass] === 'undefined') {
+				alreadyRegistered[ruleClass] = true;
+				// ReSharper disable once InconsistentNaming
+				rules.push(new ruleClass(settingProvider, this.logger));
+			}
 		});
+		return rules;
 	}
 
 }
