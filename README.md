@@ -2,4 +2,4 @@
 
 <img src="https://github.com/jedmao/code-genie/blob/master/artwork/code-genie-header.png?raw=true" width="350" height="64" alt="code genie">
 
-Infers, checks and fixes (beautifies) JavaScript based on EditorConfig and/or code-genie settings.
+Beautifies JavaScript based on EditorConfig and/or code-genie settings.
