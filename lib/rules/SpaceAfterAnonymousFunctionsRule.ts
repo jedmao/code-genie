@@ -12,7 +12,7 @@ class SpaceAfterAnonymousFunctionsRule extends Rule {
 		if (this.settings['space_after_anonymous_functions']) {
 			this.enforceSpaceAfterAnonymousFunctions(token);
 		} else {
-			this.removeSpaceAfterAnonymousFunctions(token);
+			this.removeSpacesAfterAnonymousFunctions(token);
 		}
 	}
 
@@ -20,7 +20,7 @@ class SpaceAfterAnonymousFunctionsRule extends Rule {
 		// TODO: enforce space after anonymous functions
 	}
 
-	private removeSpaceAfterAnonymousFunctions(token: Token) {
+	private removeSpacesAfterAnonymousFunctions(token: Token) {
 		// TODO: remove space after anonymous functions
 	}
 

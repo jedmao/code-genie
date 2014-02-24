@@ -12,7 +12,7 @@ class SpaceAfterControlStatementsRule extends Rule {
 		if (this.settings['space_after_control_statements']) {
 			this.enforceSpaceAfterControlStatements(token);
 		} else {
-			this.removeSpaceAfterControlStatements(token);
+			this.removeSpacesAfterControlStatements(token);
 		}
 	}
 
@@ -20,7 +20,7 @@ class SpaceAfterControlStatementsRule extends Rule {
 		// TODO: enforce space after anonymous functions
 	}
 
-	private removeSpaceAfterControlStatements(token: Token) {
+	private removeSpacesAfterControlStatements(token: Token) {
 		// TODO: remove space after anonymous functions
 	}
 
