@@ -1,4 +1,5 @@
-﻿import Rule = require('./Rule');
+﻿import LiteralToken = require('../tokens/LiteralToken');
+import Rule = require('./Rule');
 import Token = require('../tokens/Token');
 require('../util/string');
 
@@ -13,7 +14,7 @@ class IndentStyleRule extends Rule {
 		];
 	}
 
-	private oneIndent;
+	private oneIndent: string;
 	private tryParseOneIndent(): boolean {
 		var indentStyle = this.settings['indent_style'];
 		if (indentStyle === 'tab') {
@@ -33,9 +34,11 @@ class IndentStyleRule extends Rule {
 
 	fix(token: Token) {
 		if (!this.tryParseOneIndent()) {
-			return token;
+			return;
 		}
-		// TODO: fix indentation
+		token.find('leading-whitespace').forEach((t: LiteralToken) => {
+			t.value = t.raw = (<any>this.oneIndent).repeat(t.level);
+		});
 	}
 
 }

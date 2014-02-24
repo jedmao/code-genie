@@ -76,6 +76,10 @@
 		return this;
 	}
 
+	get level(): number {
+		return 0;
+	}
+
 }
 
 export = Token;
