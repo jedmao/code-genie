@@ -1,5 +1,6 @@
 ﻿import os = require('os');
 
+import newlines = require('../newlines');
 import Rule = require('./Rule');
 import Token = require('../tokens/Token');
 
@@ -13,6 +14,12 @@ class InsertFinalNewlineRule extends Rule {
 		];
 	}
 
+	private EOL: string;
+	private tryParseEOL() {
+		this.EOL = newlines[this.settings['end_of_line']] || os.EOL;
+		return true;
+	}
+
 	fix(token: Token) {
 		if (this.settings['insert_final_newline']) {
 			this.enforceFinalNewline(token);
@@ -22,11 +29,12 @@ class InsertFinalNewlineRule extends Rule {
 	}
 
 	private enforceFinalNewline(token: Token) {
-		// ReSharper disable once InconsistentNaming
-		var EOL = this.settings['end_of_line'] || os.EOL;
+		if (!this.tryParseEOL()) {
+			return;
+		}
 		var lastToken = token.last;
 		if (!lastToken.is('newline')) {
-			lastToken.insertNewlineAfter(EOL);
+			lastToken.insertNewlineAfter(this.EOL);
 		}
 	}
 

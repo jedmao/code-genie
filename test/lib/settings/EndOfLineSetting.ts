@@ -24,12 +24,12 @@ describe('EndOfLine Setting', () => {
 	});
 
 	it('supports and parses lf setting', () => {
-		expect(setting.parse('lf')).to.eq('\n');
+		expect(setting.parse('lf')).to.eq('lf');
 		expect(onWarn).to.not.have.been.called;
 	});
 
 	it('supports and parses crlf setting', () => {
-		expect(setting.parse('crlf')).to.eq('\r\n');
+		expect(setting.parse('crlf')).to.eq('crlf');
 		expect(onWarn).to.not.have.been.called;
 	});
 

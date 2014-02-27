@@ -37,7 +37,7 @@ class IndentStyleRule extends Rule {
 			return;
 		}
 		token.find('leading-whitespace').forEach((t: LiteralToken) => {
-			t.value = t.raw = (<any>this.oneIndent).repeat(t.level);
+			t.raw = t.value = (<any>this.oneIndent).repeat(t.level);
 		});
 	}
 
