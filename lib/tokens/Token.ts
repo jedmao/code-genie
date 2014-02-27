@@ -1,4 +1,7 @@
-﻿class Token {
+﻿import StringLiteralToken = require('./StringLiteralToken');
+
+
+class Token {
 
 	//static parse(contents: string) {
 	//	return new Token();
@@ -32,8 +35,28 @@
 		return;
 	}
 
-	find(selector: string) {
+	find(selector: string): Token[] {
 		return [this];
+	}
+
+	findNewlines(): StringLiteralToken[] {
+		return <Array<StringLiteralToken>>this.find('StringLiteral');
+	}
+
+	findLeadingWhitespace(): StringLiteralToken[] {
+		return <Array<StringLiteralToken>>this.find('StringLiteral');
+	}
+
+	findTrailingWhitespace(): StringLiteralToken[] {
+		return <Array<StringLiteralToken>>this.find('StringLiteral');
+	}
+
+	findStringLiterals(): StringLiteralToken[] {
+		return <Array<StringLiteralToken>>this.find('StringLiteral');
+	}
+
+	findFunctionExpressions(): Token[] {
+		return this.find('FunctionExpression');
 	}
 
 	findHas(property: string) {

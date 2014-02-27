@@ -1,5 +1,4 @@
-﻿import LiteralToken = require('../tokens/LiteralToken');
-import Rule = require('./Rule');
+﻿import Rule = require('./Rule');
 import Token = require('../tokens/Token');
 require('../util/string');
 
@@ -36,7 +35,7 @@ class IndentStyleRule extends Rule {
 		if (!this.tryParseOneIndent()) {
 			return;
 		}
-		token.find('leading-whitespace').forEach((t: LiteralToken) => {
+		token.findLeadingWhitespace().forEach(t => {
 			t.raw = t.value = (<any>this.oneIndent).repeat(t.level);
 		});
 	}

@@ -15,7 +15,9 @@ class TrimTrailingWhitespaceRule extends Rule {
 	}
 
 	private trimTrailingWhitespace(token: Token) {
-		// TODO: trim trailing whitespace
+		token.findTrailingWhitespace().forEach(t => {
+			t.remove();
+		});
 	}
 
 }

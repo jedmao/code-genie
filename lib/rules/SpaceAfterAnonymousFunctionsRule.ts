@@ -9,18 +9,21 @@ class SpaceAfterAnonymousFunctionsRule extends Rule {
 	}
 
 	fix(token: Token) {
+		var fn: Function;
 		if (this.settings['space_after_anonymous_functions']) {
-			this.enforceSpaceAfterAnonymousFunctions(token);
+			fn = this.enforceSpace;
 		} else {
-			this.removeSpacesAfterAnonymousFunctions(token);
+			fn = this.removeSpaces;
 		}
+		// TODO: filter to id === null
+		token.findFunctionExpressions().forEach(fn.bind(this, token));
 	}
 
-	private enforceSpaceAfterAnonymousFunctions(token: Token) {
+	private enforceSpace(token: Token) {
 		// TODO: enforce space after anonymous functions
 	}
 
-	private removeSpacesAfterAnonymousFunctions(token: Token) {
+	private removeSpaces(token: Token) {
 		// TODO: remove space after anonymous functions
 	}
 
